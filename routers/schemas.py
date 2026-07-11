@@ -50,3 +50,8 @@ class PostDisplay(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class UserAuth(BaseModel):
+    id: int
+    username: str
+    email: str

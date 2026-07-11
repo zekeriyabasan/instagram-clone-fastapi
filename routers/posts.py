@@ -6,9 +6,10 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile,status
 from fastapi.params import File
 from sqlalchemy.orm import Session
 
+from auth.oauth2 import get_current_user
 from db.database import get_db
 from db import db_post
-from routers.schemas import PostBase, PostDisplay
+from routers.schemas import PostBase, PostDisplay, UserAuth
 
 router = APIRouter(
     prefix="/posts",
@@ -18,17 +19,17 @@ router = APIRouter(
 
 image_url_types = ["absolute", "relative"]
 @router.post("/", response_model=PostDisplay)
-def create_post(post: PostBase, db: Session = Depends(get_db)):
+def create_post(post: PostBase, db: Session = Depends(get_db), current_user:UserAuth = Depends(get_current_user)): # current_user ile jwt validation yapıyoruz ve sadece login olan kullanıcı post oluşturabilir.
     if(not post.image_url_type in image_url_types):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=f"Invalid image_url_type. Must be one of {image_url_types}")
     return db_post.create_a_post(db, post, post.user_id) 
     
 @router.get("/", response_model=list[PostDisplay])
-def get_posts(db: Session = Depends(get_db)):
+def get_posts(db: Session = Depends(get_db),current_user:UserAuth = Depends(get_current_user)):
     return db_post.get_all_posts(db)
 
 @router.post("/upload_image")
-def upload_image(image: UploadFile = File(...)):
+def upload_image(image: UploadFile = File(...), current_user:UserAuth = Depends(get_current_user)):
     # Save the uploaded image to a specific location
     letters = string.ascii_letters
     random_string = ''.join(random.choice(letters) for i in range(10))
