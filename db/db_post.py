@@ -20,3 +20,6 @@ def create_a_post(db: Session, post: PostBase, user_id: int):
     db.commit()
     db.refresh(db_post)
     return db_post
+
+def get_all_posts(db: Session):
+    return db.query(DbPost).all()

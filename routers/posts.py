@@ -18,3 +18,6 @@ def create_post(post: PostBase, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=f"Invalid image_url_type. Must be one of {image_url_types}")
     return db_post.create_a_post(db, post, post.user_id) 
     
+@router.get("/", response_model=list[PostDisplay])
+def get_posts(db: Session = Depends(get_db)):
+    return db_post.get_all_posts(db)
