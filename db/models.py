@@ -11,6 +11,7 @@ class DbUser(Base):
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     items = relationship('DbPost', back_populates='user')
+    comments = relationship('DbComment', back_populates='user')
 
 
 class DbPost(Base):
@@ -24,3 +25,16 @@ class DbPost(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     user = relationship('DbUser', back_populates='items')
     timestamp = Column(DateTime, nullable=False)
+    comments = relationship('DbComment', back_populates='post')
+
+class DbComment(Base):
+    __tablename__ = 'comments'
+
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
+    timestamp = Column(DateTime, nullable=False)
+
+    user = relationship('DbUser', back_populates='comments')
+    post = relationship('DbPost', back_populates='comments')

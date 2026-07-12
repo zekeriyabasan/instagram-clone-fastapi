@@ -55,3 +55,11 @@ class UserAuth(BaseModel):
     id: int
     username: str
     email: str
+
+class CommentBase(BaseModel):
+    content: str
+    post_id: int
+
+    model_config = {
+        "from_attributes": True
+    }
