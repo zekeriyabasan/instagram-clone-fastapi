@@ -17,4 +17,4 @@ def create_comment(comment: CommentBase, db: Session = Depends(get_db), current_
     post = db_post.get_post_by_id(db, comment.post_id)
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
-    return db_comment.create_a_comment(db, comment, current_user.id)
+    return db_comment.create_a_comment(db, comment, current_user.id, current_user.username)

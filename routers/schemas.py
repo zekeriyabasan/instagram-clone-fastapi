@@ -42,6 +42,7 @@ class CommentDisplay(BaseModel):
     id: int
     content: str
     user_id: int
+    username: str
     post_id: int
     timestamp: datetime
 
