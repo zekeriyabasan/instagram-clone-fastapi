@@ -40,3 +40,13 @@ def upload_image(image: UploadFile = File(...), current_user:UserAuth = Depends(
         shutil.copyfileobj(image.file, buffer)
     return {"info": f"Image '{image.filename}' uploaded successfully. path:{file_location}"}
 
+@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(post_id: int, db: Session = Depends(get_db), current_user:UserAuth = Depends(get_current_user)):
+    post = db_post.get_post_by_id(db, post_id)
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id {post_id} not found")
+    if post.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not authorized to delete this post")
+    db_post.delete_a_post(db, post_id)
+    return {"detail": f"Post with id {post_id} deleted successfully"}
+
