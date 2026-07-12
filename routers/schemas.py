@@ -38,6 +38,17 @@ class PostBase(BaseModel):
         "from_attributes": True
     }
 
+class CommentDisplay(BaseModel):
+    id: int
+    content: str
+    user_id: int
+    post_id: int
+    timestamp: datetime
+
+    model_config = {
+        "from_attributes": True
+    }
+
 class PostDisplay(BaseModel):
     title: str
     content: str
@@ -46,6 +57,7 @@ class PostDisplay(BaseModel):
     user_id: int
     user: User
     timestamp: datetime
+    comments: list[CommentDisplay] = []
 
     model_config = {
         "from_attributes": True
