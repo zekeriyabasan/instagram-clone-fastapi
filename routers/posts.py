@@ -38,7 +38,7 @@ def upload_image(image: UploadFile = File(...), current_user:UserAuth = Depends(
     file_location = f"images/{image.filename}"
     with open(file_location, "w+b") as buffer:
         shutil.copyfileobj(image.file, buffer)
-    return {"info": f"Image '{image.filename}' uploaded successfully. path:{file_location}"}
+    return {"image_url": file_location}
 
 @router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(post_id: int, db: Session = Depends(get_db), current_user:UserAuth = Depends(get_current_user)):

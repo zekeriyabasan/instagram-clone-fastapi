@@ -25,7 +25,11 @@ class DbPost(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     user = relationship('DbUser', back_populates='items')
     timestamp = Column(DateTime, nullable=False)
-    comments = relationship('DbComment', back_populates='post')
+    comments = relationship(
+    "DbComment",
+    back_populates="post",
+    cascade="all, delete-orphan"
+)
 
 class DbComment(Base):
     __tablename__ = 'comments'
@@ -38,4 +42,8 @@ class DbComment(Base):
     timestamp = Column(DateTime, nullable=False)
 
     user = relationship('DbUser', back_populates='comments')
-    post = relationship('DbPost', back_populates='comments')
+    post = relationship(
+    "DbPost",
+    back_populates="comments"
+)
+

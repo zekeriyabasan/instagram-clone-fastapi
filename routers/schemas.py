@@ -51,6 +51,7 @@ class CommentDisplay(BaseModel):
     }
 
 class PostDisplay(BaseModel):
+    id: int
     title: str
     content: str
     image_url: str
